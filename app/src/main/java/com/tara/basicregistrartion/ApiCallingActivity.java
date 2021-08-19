@@ -42,33 +42,37 @@ public class ApiCallingActivity extends AppCompatActivity {
             btn_submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String number = et_id.getText().toString();
-                    int num = Integer.parseInt(number);
-                    Log.d("Tarang", "onClick: "+num);
-                    if(num != 0){
-                        Call<List<Response>> listCalls = service.getResponseListWithId(num);
-                        listCalls.enqueue(new Callback<List<Response>>() {
-                            @Override
-                            public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
-                                if(response.isSuccessful()){
-                                    List<Response> responseList = response.body();
-                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ApiCallingActivity.this);
-                                    adapterResponse = new AdapterResponse(ApiCallingActivity.this,responseList);
-                                    recyclerview.setLayoutManager(linearLayoutManager);
-                                    recyclerview.setAdapter(adapterResponse);
-                                    adapterResponse.notifyDataSetChanged();
-                                    Toast.makeText(ApiCallingActivity.this, "success", Toast.LENGTH_SHORT).show();
-                                    et_id.setText("");
+                    try {
+                        String number = et_id.getText().toString();
+                        int num = Integer.parseInt(number);
+                        Log.d("Tarang", "onClick: " + num);
+                        if (num != 0) {
+                            Call<List<Response>> listCalls = service.getResponseListWithId(num);
+                            listCalls.enqueue(new Callback<List<Response>>() {
+                                @Override
+                                public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
+                                    if (response.isSuccessful()) {
+                                        List<Response> responseList = response.body();
+                                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ApiCallingActivity.this);
+                                        adapterResponse = new AdapterResponse(ApiCallingActivity.this, responseList);
+                                        recyclerview.setLayoutManager(linearLayoutManager);
+                                        recyclerview.setAdapter(adapterResponse);
+                                        adapterResponse.notifyDataSetChanged();
+                                        Toast.makeText(ApiCallingActivity.this, "success", Toast.LENGTH_SHORT).show();
+                                        et_id.setText("");
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<List<Response>> call, Throwable t) {
-                                Toast.makeText(ApiCallingActivity.this, "failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }else{
-                        Toast.makeText(ApiCallingActivity.this, "Enter Number", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Call<List<Response>> call, Throwable t) {
+                                    Toast.makeText(ApiCallingActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(ApiCallingActivity.this, "Enter Number", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (NullPointerException | NumberFormatException e){
+                        e.printStackTrace();
                     }
                 }
             });
