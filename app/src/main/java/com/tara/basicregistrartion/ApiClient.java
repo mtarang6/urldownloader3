@@ -7,7 +7,7 @@ public class ApiClient {
     public static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
     private static Retrofit retrofit = null;
 
-  //  https://jsonplaceholder.typicode.com/comments
+
     public static Retrofit getClient() {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
